@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script src="button.js"></script>
+    <style>
+        .center {
+            margin: auto;
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            flex: 0 0 5rem;
+        }
+
+        button {
+            width: 3rem;
+            height: 3rem;
+            margin: 0 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="center">
+    <div>Tại sao button click ko hoạt động đúng?</div>
+    <br/>
+    <div class="buttons">
+    </div>
+    <div class="info"></div>
+</div>
+
+<script>
+    function createButtons() {
+        const parent = document.querySelector('.buttons');
+        const info = document.querySelector('.info');
+        const buttonIds = [1, 2, 3, 4, 5];
+
+        for (var id of buttonIds) {
+            parent.appendChild(new Button(id, function () {
+                info.innerText = `Đã click Button ${id}`;
+            }).render());
+        }
+    }
+
+    createButtons();
+</script>
+
+
+</body>
+</html>
