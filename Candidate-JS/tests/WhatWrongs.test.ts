@@ -3,13 +3,16 @@ import Calculator from "../src/Calculator";
 import {Machine} from "../src/Machines";
 import Utils from "../src/Sorter";
 import Logger from "../src/Logger";
-import * as fs from "node:fs";
 import {exec} from 'child_process';
+import {fetchData} from "../src/Utils";
+import EnvConfig from "../src/EnvConfig";
+
+const API_HOST = "http://localhost:9000/api";
 
 describe("WhatWrongs", () => {
 
     test("Bài 1: Tại sao sai số?", async () => {
-        const usersInputData = fs.readFileSync(`./data/usersInputData.txt`, "utf-8");
+        const usersInputData = await fetchData(`${API_HOST}/user-income-list`);
         const data = usersInputData.split("\n");
         const incomes = data.map((income) => Calculator.parseFloat(income.trim()));
         const totalIncome = incomes.reduce((total, income) => total + income, 0);
@@ -42,5 +45,16 @@ describe("WhatWrongs", () => {
         });
 
         willReject.catch(logger.log);
+    });
+
+    test("Bài 6: Update version?", async () => {
+        const serverVersion = await fetchData(`${API_HOST}/version`);
+        const myVersion = new EnvConfig().version;
+
+        // Mong đợi: Nếu serverVersion lớn hơn myVersion thì phải update
+        console.log(`Server version: ${serverVersion}, My version: ${myVersion}`);
+        const shouldUpdate = serverVersion > myVersion;
+
+        expect(shouldUpdate).toBe(true);
     });
 });
